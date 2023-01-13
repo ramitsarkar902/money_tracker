@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const transactionSchema = new mongoose.Schema(
   {
-    createdBy: mongoose.Types.ObjectId,
+    createdBy: Object,
     users: [{ user: Object, amount: Number }],
     amountPaid: {
       type: Number,

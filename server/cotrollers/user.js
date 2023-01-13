@@ -12,8 +12,10 @@ export const createUser = async (req, res, next) => {
 };
 export const createTransaction = async (req, res, next) => {
   try {
+    const u = await User.findById(req.body.createdBy);
     const t = new Transaction({
       ...req.body,
+      createdBy: u,
       amountLeft: req.body.totalAmount,
     });
     await t.save();
@@ -39,11 +41,7 @@ export const updateTransaction = async (req, res, next) => {
     if (tr.amountLeft - req.body.amount < 0)
       return res
         .status(404)
-        .json(
-          `Amount Left is ${
-            tr.amountLeft 
-          }! Pay only that much or less`
-        );
+        .json(`Amount Left is ${tr.amountLeft}! Pay only that much or less`);
 
     const t = await Transaction.findByIdAndUpdate(req.params.id, {
       $push: { users: { user: others, amount: req.body.amount } },
@@ -92,6 +90,24 @@ export const getTransaction = async (req, res, next) => {
   try {
     const t = await Transaction.findById(req.params.id);
     res.status(200).json(t);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getAllTransactions = async (req, res, next) => {
+  try {
+    const t = await Transaction.find({});
+    res.status(200).json(t);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const u = await User.find();
+    res.status(200).json(u);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
