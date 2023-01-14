@@ -1,15 +1,26 @@
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteTransaction, getATransaction } from "../apiCalls";
+import {
+  deleteTransaction,
+  getATransaction,
+  updateTransaction,
+} from "../apiCalls";
 const Transaction = ({ userData }) => {
   const [data, setData] = useState(null);
+  const [userId, setUserId] = useState("");
+  const [amount, setAmount] = useState(0);
   const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
     getATransaction(id, setData);
   }, []);
 
+  const handlePay = (e) => {
+    e.preventDefault();
+    updateTransaction({ id, userId, amount });
+    navigate("/");
+  };
   return (
     <Box
       sx={{
@@ -85,21 +96,44 @@ const Transaction = ({ userData }) => {
         }}
       >
         <p>List Of All Users:</p>
-        {userData.map((u) => (
+        {userData.map((u, idx) => (
           <div
+            key={idx}
             style={{
               display: "flex",
               gap: "20px",
             }}
           >
             <p>Name:{u.username}</p>
-            <p>Id:{u._id}</p>
+            <p>
+              Id:
+              <input value={u._id} />
+            </p>
           </div>
         ))}
       </div>
 
       <div>
         <p>Pay</p>
+        <form onSubmit={handlePay}>
+          <input
+            type="text"
+            placeholder="ID of user"
+            value={userId}
+            onChange={(e) => {
+              setUserId(e.target.value);
+            }}
+          />
+          <input
+            type="number"
+            placeholder="Amount"
+            value={amount}
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
+          />
+          <button type="submit">Submit</button>
+        </form>
       </div>
     </Box>
   );

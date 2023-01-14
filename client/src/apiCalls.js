@@ -22,3 +22,10 @@ export const getAllUsers = async (setUserData) => {
   const res = await axios.get("http://localhost:10000/api/user");
   setUserData(res.data);
 };
+
+export const updateTransaction = async ({ id, userId, amount }) => {
+  await axios.put(`http://localhost:10000/api/user/transaction/${id}`, {
+    user: userId,
+    amount: amount,
+  });
+};

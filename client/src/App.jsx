@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { getAllUsers } from "./apiCalls.js";
 import Home from "./pages/Home";
 import Transaction from "./pages/Transaction";
 function App() {
   const [userData, setUserData] = useState(null);
-  console.log(userData);
+
+  useEffect(() => {
+    getAllUsers(setUserData);
+  }, []);
+
   return (
     <div className="App">
       <Routes>

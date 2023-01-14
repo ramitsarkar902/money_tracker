@@ -3,12 +3,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAllTransactions, getAllUsers } from "../apiCalls.js";
-function Home({ setUserData }) {
+function Home() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   useEffect(() => {
     getAllTransactions(setData);
-    getAllUsers(setUserData);
   }, []);
 
   const columns = [
